@@ -1,0 +1,25 @@
+{% extends "bootstrap/base.html" %}
+{% block head %}
+	{{super()}}
+	{% block styles %}
+		{{super()}}
+		{%include 'main/styling.html' %}
+	{% endblock %}
+{% endblock %}
+{% block content %}
+	<div class='home_header'>
+		<div class='container'>
+			<h2>Profiles</h2>
+		</div>
+	</div>
+	<div class='container'>
+		<table class="table table-hover">
+			<caption>Click on a name to visit their profile</caption>
+		{% for user in users %}
+			<tr>
+				<td><a href="{{url_for('profiles.view',name=user.name)}}"><h3>{{user.name}}</h3></a></td>
+			</tr>
+		{% endfor %}
+		</table>
+	</div>
+{% endblock %}

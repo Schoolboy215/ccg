@@ -1,0 +1,28 @@
+{% extends "bootstrap/base.html" %}
+{% block content%}
+	<div class="container">
+		<form method="POST" autocomplete="off" enctype="multipart/form-data" accept-charset="UTF-8" role="form">
+			<div class="form-group">
+				<label for="name">Name</label>
+				<input class="form-control" type="text" value="{{card.name}}" name="name" id="name"></input>
+			</div>
+			<div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" name="description" id="description">{{card.description}}</textarea>
+                        </div>
+			<div class="form-group">
+                                <label for="backgroundColor">Background color</label>
+                                <input class="form-control" type="text" value="{{card.backgroundColor}}" name="backgroundColor" id="backgroundColor"></input>
+                        </div>
+			<div class="form-group">
+                                <label for="holoAllowed">Holographics allowed</label>
+                                <input type="checkbox" name="holoAllowed" id="holoAllowed" {% if card.holoAllowed %}checked{%endif%}></input>
+                        </div>
+			<div class="form-group">
+                                <label for="holoAlways">Always holographic</label>
+                                <input type="checkbox" name="holoAlways" id="holoAlways" {% if card.holoAlways %}checked{%endif%}></input>
+                        </div>
+			<button class="btn btn-default" type="submit" name="submit">Save changes</button>
+		</form>
+	</div>
+{% endblock %}

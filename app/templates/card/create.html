@@ -1,0 +1,90 @@
+{% extends "bootstrap/base.html" %}
+{% block content%}
+{% macro render_field(field, placeholder=None) %}
+{% if field.errors %}
+<div>
+{% elif field.flags.error %}
+<div>
+{% else %}
+<div>
+{% endif %}
+    {% set css_class = 'form-control ' + kwargs.pop('class', '') %}
+    {{ field(class=css_class, placeholder=placeholder, **kwargs) }}
+</div>
+{% endmacro %}
+
+<div>
+  <div>
+    <div class="container">
+        <h2>Tips</h2>
+	<div class="panel panel-danger">
+		<div class="panel-heading">
+			<h4 class="panel-title">Warning</h4>
+		</div>
+		<div class="panel-body">
+			<p>You are using an early version of this site. There is basically no validation here, so be careful! Follow all below directions exactly.</p>
+		</div>
+	</div>
+	<div class="panel panel-default">
+                <div class="panel-heading">
+                        <h4 class="panel-title">Color</h4>
+                </div>
+                <div class="panel-body">
+                        <p>The color field lets you type in the hex value of the color you would like to have displayed as the background of the card. It will fill everywhere except for the image and the area immediatley behind the text.</p>
+			<p>A border is added at the end of the card rendering process and its color is currently fixed as gold for every card. This might be maintainable later.</p>
+			<p>While you are allowed to specify any color, it is suggested that you base it on how rare you think the card is. Recommended values are as follows:</p>
+			<ul>
+				<li>Common: <span style="background-color:#111111; color:white">#111111</span></li>
+				<li>Uncommon: <span style="background-color:#868d99; color:white">#868d99</span></li>
+				<li>Rare: <span style="background-color:#cec814; color:white">#cec814</span></li>
+				<li>Mythic: <span style="background-color:#a80a2c; color:white">#a80a2c</span></li>
+			</ul>
+			<p>Make sure you put in the #</p>
+                </div>
+        </div>
+	<h3 class="page-header">Image</h3>
+	<p>This site does not do any image scaling. That means if you upload a picture for your card that is different from the others, it will always look different.</p>
+	<p>You are currently allowed to upload anything and the server doesn't check it. Please follow these guidelines:</p>
+	<p><strong>PNG files only</strong></p>
+	<p><strong>256x256</strong></p>
+    </div>
+    <div class="container">
+    <h1 class="page-header">Create card</h1>
+    {% with errors = get_flashed_messages(category_filter=["error"]) %}
+    {% if errors %}
+    <div>
+    {% for error in errors %}
+    {{ error }}<br>
+    {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    {% if form.errors %}
+    <div>
+    {% for field, error in form.errors.items() %}
+    {% for e in error %}
+    {{ e }}<br>
+    {% endfor %}
+    {% endfor %}
+    </div>
+    {% endif %}
+    <form method="POST" autocomplete="off" enctype="multipart/form-data" action="." accept-charset="UTF-8" role="form">
+      {{ form.csrf_token }}
+      {{ render_field(form.name, placeholder="Card name",
+                                  autofocus="") }}
+      {{ render_field(form.description, placeholder="Description") }}
+      {{ render_field(form.backgroundColor, placeholder="#RRGGBB") }}
+      <label>Holographics allowed</label>
+      {{ render_field(form.holoAllowed) }}
+      <label>Holographics always</label>
+      {{ render_field(form.holoAlways) }}
+      {{ form.image }}
+      <div>
+      </div>
+      <button class="btn btn-success" type="submit" name="submit">Make card!</button>
+    </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

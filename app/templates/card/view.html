@@ -1,0 +1,98 @@
+{% extends "bootstrap/base.html" %}
+{% block head %}
+{{super()}}
+	<title>{{card.name}}</title>
+	{% block metas %}
+	{{super()}}
+        <meta name="description" content="{{card.description}}">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content = "{{card.name}}">
+        <meta name="twitter:description" content="{{card.description}}">
+	{% endblock %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<style>
+	#cardHolder{
+		background-color: {{card.backgroundColor}};
+		border-style: double;
+		border-width: 15px;
+		border-color: {{borderColor}};
+	}
+</style>
+	<script>
+		$(function(){
+                        $('#whoModal').on('hidden.bs.modal', function (e) {
+                                console.info(e.relatedTarget);
+                                $('#whoTable').empty();
+                        });
+                        $('#whoModal').on('show.bs.modal', function () {
+                                $.post("{{url_for('card.who',id=card.id)}}", function( data )
+                                {
+					console.info(data);
+                                        var parsed = JSON.parse(data);
+					console.info(parsed);
+                                        for (var key in parsed)
+                                        {
+						var holoInsert = '<td></td>';
+						if (parsed[key][1] == true)
+							holoInsert = '<td><span class="glyphicon glyphicon-star"></span></td>';
+                                        	$("#whoTable").append('<tr><td>'+parsed[key][0]+'</td>'+holoInsert+'</tr>');
+                                        }
+                                });
+                        });
+                });
+	</script>
+{% endblock %}
+{% block content %}
+<div class="row">
+	<div class = "col-md-3 col-md-offset-4" id=cardHolder style="background-color:{{card.backgroundColor}};">
+		<div class="row" style="margin:2%">
+                               <h3 style='border-style:solid; margin-top:0px; margin-bottom:0px;background-color:{{textBackground}}'>{{card.name}}</h3>
+                       </div>
+		<div class="row" style='width:96%; margin-left:2%; margin-right:2%'>
+			<img style="width:100%;margin-auto" src='{{url_for('static',filename = 'cardImages/' + card.imageName + '.png')}}'>
+		</div>
+		<div class="row" style="margin:2%">
+			<p style="margin:0;border-style:solid; background-color:{{textBackground}}">{{card.description}}</p>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class = "col-md-2 col-md-offset-4">
+		<form method="POST" enctype="multipart/form-data" action="{{url_for('card.grantCard',id=card.id)}}" accept-charset="UTF-8" role="form">
+			<button type="submit" class='btn btn-success' name="submit">I earned one</button>
+		</form>
+	</div>
+	<div class = "col-md-1">
+		<a style="display:inline-block" href="{{url_for('card.edit', id=card.id)}}" class="btn btn-info">Edit</a>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-2 col-md-offset-4">
+		<form  onsubmit="return confirm('Do you really want to delete this card? DO NOT DO THIS IF PEOPLE ALREADY OWN IT');" action="{{url_for('card.delete',id = card.id)}}" method='POST'>
+                	<input type="submit" class="btn btn-danger" name="delete" value="Delete card"></input>
+                </form>
+	</div>
+	<div class="col-md-1">
+		<button id="whoButton" class='btn btn-default' data-toggle='modal' data-target='#whoModal'>To whom does this card belong?</button>
+	</div>
+</div>
+<div class="modal" id="whoModal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm" role="document">
+        	<div class="modal-content">
+                	<div class="modal-header">
+                        	<button type="button" class="close" data-dismiss="modal"></button>
+                        	<h4 class="modal-title">Here's who has that</h4>
+                        </div>
+                        <div class="modal-body">
+                        	<div id="whoShower">
+                                	<table class="table table-condensed bg-info" id="whoTable">
+                                        </table>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                        	<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                        </div>
+                </div>
+        </div>
+</div>
+{% endblock %}

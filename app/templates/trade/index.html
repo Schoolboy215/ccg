@@ -1,0 +1,37 @@
+{% extends "bootstrap/base.html" %}
+{% block head %}
+	{{super()}}
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	{% block styles %}
+                {{super()}}
+                {%include 'main/styling.html'%}
+        {% endblock %}
+{% endblock %}
+{% block content %}
+	<div class='home_header'>
+                <div class='container'>
+                        <h2>Your active trades</h2>
+                </div>
+        </div>
+	<div class="container">
+		<table class="table">
+			<tr>
+				<th>ID</th>
+				<th>With</th>
+				<th>Date started</th>
+			</tr>
+			{% for trade in trades%}
+				<tr>
+					<td><a href="{{url_for('trade.showTrade',id=trade.id)}}">{{trade.id}}</a></id>
+					{%if trade.user1_id == user.id%}
+						<td>{{trade.user2_name}}</td>
+					{%else%}
+						<td>{{trade.user1_name}}</td>
+					{%endif%}
+
+					<td>{{trade.date_created}}</td>
+				</tr>
+			{%endfor%}
+		</table>
+	</div>
+{% endblock %}

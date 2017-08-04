@@ -1,0 +1,190 @@
+{% extends "bootstrap/base.html" %}
+{% block head %}
+	{{super()}}
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script>
+		$(function(){
+			$('#addMoreModal').on('hidden.bs.modal', function (e) {
+				console.info(e.relatedTarget);
+				$('#cardSelectorTable').empty();
+			});
+			$('#addMoreModal').on('show.bs.modal', function () {
+				$.post("{{url_for('trade.myUnusedCards',id=trade.id)}}", function( data )
+                        	{
+        	                        var parsed = JSON.parse(data);
+	                                for (var key in parsed)
+	                                {
+	                                        var quantityStr = "";
+	                                        var holoStr = "";
+	                                        if (parsed[key]['quantity'] > 1)
+	                                                quantityStr = "(" + parsed[key]['quantity'] + ")";
+	                                        if (parsed[key]['cardHolo'])
+	                                                holoStr = "HOLO ";
+	                                        if (parsed[key]['quantity'] > 1)
+	                                        {
+	                                                $("#cardSelectorTable").append('<tr><td><input type="checkbox" value='+key+'></td><td>'+holoStr+parsed[key]['cardName']+quantityStr+'</td><td><input type="number" class="form-control" id='+key+' name="quantity" value="1"></input></td></tr>');
+	                                        }
+	                                        else {
+	                                                $("#cardSelectorTable").append('<tr><td><input type="checkbox" value='+key+'></td><td>'+holoStr+parsed[key]['cardName']+quantityStr+'</td></tr>');
+	                                        }
+	                                }
+	                        });
+			});
+		});
+		function confirmAdd()
+		{
+			var checkedArray = [];
+			$("input:checked").each(function () {
+				var $row = $(this).parents('tr');
+				var $numBox = $row.find('input[name="quantity"]');
+				var toInsert = {};
+
+				console.info($numBox);
+				console.info($numBox.value);
+				if ($numBox.length)
+				{
+					toInsert['quantity'] = $numBox.val();
+				} else 
+				{
+					toInsert['quantity'] = 1;
+				}
+				toInsert['id'] = $(this).attr('value');
+				checkedArray.push(toInsert);
+			});
+			console.info(checkedArray);
+			$.post("{{url_for('trade.addCards', id=trade.id)}}", {"checkedIds": JSON.stringify(checkedArray)}, function(datai, statusText, xhr)
+			{
+				if (xhr.status != 200)
+				{
+					alert("Response status : " + xhr.status + "\n" + data);
+				} else 
+				{
+					location.reload();
+				}
+		
+			});
+		}
+		function removeCard(clickedId)
+		{
+			$.post("{{url_for('trade.removeCard', id=trade.id)}}", {"cardId": clickedId}, function(data)
+                        {
+				location.reload();
+                        });
+		}
+	</script>
+{% endblock %}
+{% block content %}
+	<div class = 'row'>
+		<div class='col-md-6'>
+			<div class = 'row'>
+				<div class='col-md-6'>
+					<h2 id='yourLabel'>You're offering this</h2>
+				</div>
+				<div class='col-md-6'>
+					{%if trade.user1_id == current_user.id%}
+						{%if trade.user1_approved == True%}
+							<h2 class='bg-success'>Approved</h2>
+						{%else%}
+							<h2 class='bg-danger'>Not approved</h2>
+							<form action = {{url_for('trade.approve', id=trade.id)}} method = "post">
+								<button type="submit" class='btn btn-default'>Approve</button>
+							</form>
+						{%endif%}
+					{%else%}
+						{%if trade.user2_approved == True%}
+                                                        <h2 class='bg-success'>Approved</h2>
+                                                {%else%}
+                                                        <h2 class='bg-danger'>Not approved</h2>
+							<form action = {{url_for('trade.approve', id=trade.id)}} method = "post">
+                                                                <button type="submit" class='btn btn-default'>Approve</button>
+                                                        </form>
+                                                {%endif%}
+					{%endif%}
+				</div>
+			</div>
+			<table class='table table-condensed table-hover'>
+                                <tr>
+                                        <th>Holographic?</th>
+                                        <th>Card</th>
+					<th>Remove</th>
+                                </tr>
+                                {% for line in trade.lines %}
+                                        {% if line.offering_user == current_user.id %}
+                                                <tr>
+                                                        <td>
+                                                                {%if line.holo%}<img title='holographic' src='/static/holo.png'/>{%endif%}
+                                                        </td>
+                                                        <td>
+                                                                <a href='{{url_for('profiles.viewUserCard',name=current_user.name,id=line.card_id)}}'><p>{{line.card.name}}</p></a>
+                                                        </td>
+							<td>
+								<button class="btn btn-default" onclick="removeCard({{line.card_id}})">X</button>
+							</td>
+                                                </tr>
+                                        {% endif %}
+                                {% endfor %}
+                        </table>
+			<button id="addMoreButton" class='btn btn-default' data-toggle='modal' data-target='#addMoreModal'>Add more</button>
+			<div class="modal" id="addMoreModal" tabindex="-1" role="dialog">
+				<div class="modal-dialog modal-sm" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"></button>
+							<h4 class="modal-title">Select cards to add</h4>
+						</div>
+						<div class="modal-body">
+							<div id="cardSelector">
+                                				<table class="table table-condensed bg-info" id="cardSelectorTable">
+                                				</table>
+                        				</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary" onClick="confirmAdd()">Add these</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class='col-md-6'>
+			<div class="row">
+				<div class="col-md-6">
+					<h2>You'll get this from {% if trade.user1_id == current_user.id %}{{trade.user2_name}}{%else%}{{trade.user1_name}}{%endif%}</h2>
+				</div>
+				<div class='col-md-6'>
+                                        {%if trade.user1_id == current_user.id%}
+                                                {%if trade.user2_approved == True%}
+                                                        <h2 class='bg-success'>Approved</h2>
+                                                {%else%}
+                                                        <h2 class='bg-danger'>Not approved</h2>
+                                                {%endif%}
+                                        {%else%}
+                                                {%if trade.user1_approved == True%}
+                                                        <h2 class='bg-success'>Approved</h2>
+                                                {%else%}
+                                                        <h2 class='bg-danger'>Not approved</h2>
+                                                {%endif%}
+                                        {%endif%}
+                                </div>
+			</div>
+			<table class='table table-condensed table-hover'>
+				<tr>
+					<th>Holographic?</th>
+					<th>Card</th>
+				</tr>
+				{% for line in trade.lines %}
+                                	{% if line.offering_user != current_user.id %}
+						<tr>
+							<td>
+                                                        	{%if line.holo%}<img title='holographic' src='/static/holo.png'/>{%endif%}
+	                                                </td>
+							<td>
+								<a href='{{url_for('profiles.viewUserCard',name=trade.otherUser_name,id=line.card_id)}}'><p>{{line.card.name}}</p></a>
+							</td>
+						</tr>
+	                                {% endif %}
+        	                {% endfor %}
+			</table>
+		</div>
+	</div>
+{% endblock %}

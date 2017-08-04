@@ -1,0 +1,54 @@
+{% extends "bootstrap/base.html" %}
+{% block head %}
+{{super()}}
+<style>
+	{% include "card/cardStyling.html" %}
+	{% include "partials/holoEffect.html" %}
+</style>
+        {% block styles %}
+                {{super()}}
+                {%include 'main/styling.html'%}
+        {% endblock %}
+{% endblock %}
+{% block content %}
+	<div class='home_header'>
+                <div class='container'>
+                        <a href="{{url_for('profiles.cardKind',name=user.name,id=card.id, holo=holo)}}"><h2>{{user.name}}>{{card.name}}</h2></a>
+                </div>
+        </div>
+	{% include "partials/singleCardView.html" %}
+	<div class="row">
+		<div class="col-md-2 col-md-offset-4">
+			{% if ownedCard %}
+				<form onsubmit="return confirm('Do you really want to delete this card from your colection?');" action="{{url_for('profiles.deleteCard',name = user.name, cardId = cardLookup.id)}}" method='POST'>
+					<input type="submit" class="btn btn-danger" name="delete" value="Delete card"></input>
+				</form>
+			{% else %}
+				<form action="{{url_for('trade.create',otherUserId = user.id, cardId = cardLookup.id)}}" method='POST'>
+					<input type="submit" class="btn btn-success" name="trade" value="Start trade"></input>
+				</form>
+			{% endif %}
+		</div>
+		<div class="col-md-1">
+			<a href="{{url_for('card.showCard', id=card.id)}}" class="btn btn-info">Card master</a>
+		</div>
+	</div>
+	<div class='container'>
+		<h1 class="page-header">History</h1>
+		{%if cardHistory|length == 0%}
+			<h3>This card hasn't been traded</h3>
+		{%else%}
+			<table class='table table-condensed'>
+				<thead>
+					<tr><th>Date</th><th>Traded from</th><th>Traded to</th></tr>
+				<thead>
+				<tbody>
+					{%for line in cardHistory%}
+					<tr><td>{{line['date']}}</td><td><a href={{url_for('profiles.view',name=line['giving'])}}>{{line['giving']}}</a></td><td><a href={{url_for('profiles.view',name=line['getting'])}}>{{line['getting']}}</a></td></tr>
+					{%endfor%}
+				</tbody>
+			</table>
+		{%endif%}
+		<h3>This card was pulled on {{origin['date']}} by <a href={{url_for('profiles.view',name=origin['puller'])}}>{{origin['puller']}}</a><h3>
+	</div>
+{% endblock %}

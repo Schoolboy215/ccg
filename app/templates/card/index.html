@@ -1,0 +1,36 @@
+{% extends "bootstrap/base.html" %}
+{% block head %}
+	{{super()}}
+	{% include "main/styling.html" %}
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.8/js/jquery.tablesorter.js"></script>
+{% block styles %}
+	{{super()}}
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.8/css/theme.bootstrap_3.min.css" rel="stylesheet">
+{% endblock %}
+{% block scripts %}
+	<script src="/static/js/card/index.js"></script>
+{% endblock %}
+{% endblock %}
+{% block content %}
+	<div class='home_header'>
+		<div class='container'>
+			<h2>Cards</h2>
+		</div>
+	</div>
+	<div class='container'>
+		<a class="btn btn-success" href="{{url_for('card.createCard')}}">Make a card</a>
+		<input type="text" id="nameSearchInput" placeholder="Search name here"></input>
+		<table id = "resultsTable" class='table table-condensed tablesorter'>
+			<thead>
+				<tr class="tablesorter-headerRow">
+					<th>Name</th>
+					<th>Description</th>
+					<th>Created</th>
+				</tr>
+			</thead>
+			<tbody id="resultsHolder">
+			</tbody>
+		</table>
+	</div>
+{% endblock %}

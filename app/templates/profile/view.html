@@ -1,0 +1,45 @@
+{% extends "bootstrap/base.html" %}
+{% block head %}
+	{{super()}}
+	{% block styles %}
+		{{super()}}
+		{%include 'main/styling.html'%}
+		<style>
+			.home_header{
+				background-color: #c45611;
+				color: #efd0bd;
+			}
+		</style>
+	{% endblock %}
+{% endblock %}
+{% block content %}
+	<div class='home_header'>
+		<div class='container'>
+			<h2>{{user.name}}'s profile</h2>
+		</div>
+	</div>
+	<div class='container'>
+		<table class="table table-striped table-hover">
+			<tr>
+				<th>Card</th>
+				<th>Holographic?</th>
+			</tr>
+			{% for card in cards %}
+				<tr>
+					<td>
+        	                		<h4><a href="{{url_for('profiles.cardKind', name=user.name, id=card.id, holo=holoList[loop.index0])}}">{{card.name}}</a>
+						{% if quantities[loop.index0] > 1 %}
+							({{quantities[loop.index0]}})
+						{% endif %}
+						</h4>
+					</td>
+					<td>
+					{%if holoList[loop.index0]%}
+						<span class="glyphicon glyphicon-star" style="font-size: 24px" aria-hidden="true"></span>
+					{%endif%}
+					</td>
+				</tr>
+        		{% endfor %}
+		</table>
+	</div>
+{% endblock %}

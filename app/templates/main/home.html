@@ -1,0 +1,60 @@
+{% extends "bootstrap/base.html" %}
+{% block head %}
+	{{super()}}
+	<title>ABS CCG</title>
+        {% block metas %}
+        {{super()}}
+        <meta name="description" content="A fun place to collect cards for doing nonsense things and then trading with your coworkers.">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:title" content = "ABS CCG">
+        <meta name="twitter:description" content="A fun place to collect cards for doing nonsense things and then trading with your coworkers.">
+        {% endblock %}
+	{% block styles %}
+		{{super()}}
+		{% include "main/styling.html" %}
+	{% endblock %}
+{% endblock %}
+{% block content %}
+	<div class='home_header'>
+		<div class='container'>
+			<h1>ABS CCG</h1>
+			<p>A place to create silly cards and trade them with your coworkers</p>
+		</div>
+	</div>
+	<div class='container'>
+		<h1 class='page-header'>Stuff to know about this site</h1>
+		<p>A lot of time went into this project, and development is ongoing. It's still never going to be perfect. Steps were taken to help make it secure and stable, but there are probably issues that were missed or forgotten about.</p>
+		<p>Everything has been designed to work when the user navigates around in their browser by clicking. You can look at the URLs and make good guesses for how to get around, but you might end up somewhere you didn't expect.</p>
+		<p>Steps were taken to prevent forged POST requests from messing things up, but there could still be loopholes. For the sake of everyone's enjoyment, please don't try to forge requests to mess with other users. We're here to have fun.</p>
+		<h3>Technology stack</h3>
+		<dl class="dl-horizontal bg-info">
+			<dt>Operating system</dt>
+				<dd>Ubuntu server</dd>
+			<dt>Web server</dt>
+				<dd>Apache</dd>
+			<dt>Backend code</dt>
+				<dd>Python Flask</dd>
+				<dd>SQLAlchemy</dd>
+			<dt>Database</dt>
+				<dd>SQLite3</dd>
+			<dt>Frontend</dt>
+				<dd>jQuery</dd>
+				<dd>Bootstrap</dd>
+		</dl>
+		<h1 class='page-header'>User accounts</h1>
+		<p>The first step to enjoying this wonderful site is making an account. All you need is a username and password. Your username is how other users will see the cards you've collected and initiate trades with you. There is currently no censoring on names. Use common sense.</p>
+		<p>To sign out. Delete your cookies for this site. Heh</p>
+		<h3>Security</h3>
+		<p class='bg-warning'>SSL is used, and passwords are never stored in plaintext on the server. Common sense should still tell you not to use a password that is shared with other accounts you care about though.</p>
+		<p>Many pages will check if you're logged in before allowing your browser to render anything. If you're not logged in, an automatic redirect will occur, prompting for you to do so. After successful authenticatin, the browser returns to the page you initially tried to visit.</p>
+		<h3>Changing your name/password</h3>
+		<p>There is not currently a way for a user to change his name or password. Things could be manually edited at a database console, but not easily. This feature could be added later if there is enough demand for it.</p>
+		<h1 class='page-header'>Cards</h1>
+		<p>Anyone with an account can create cards, and these cards will be available for anyone to use. Let's try not to make cards that are too easy or hard to get.<em><strong> e.g."Literally died" or "Inhaled"</strong></em><p>
+		<p>If you make a card in error, you can delete it. Please don't delete cards that are already in circulation. The system allows it, but it creates issues that need to be cleaned up by hand.</p>
+		<p>Just like usernames, no card content is censored. Use common sense.</p>
+		<h1 class='page-header'>Trades</h1>
+		<p>The bulk of the upcoming changes to this site will revolve around trades. There are known bugs right now that allow trades to process with lines that are no longer valid (e.g. User has deleted a card from their collection, but the card is still part of a trade). The system will currently ignore lines that contain errors but let the rest of the trade go through, so it's possible to rip someone off and get a card while giving nothing.</p>
+		<p>While this <em>could</em> happen by accident, it can mostly be avoided by just making sure you only have one active trade at a time. We're not here to scam each other, so just be careful.</p>
+	</div>
+{% endblock %}

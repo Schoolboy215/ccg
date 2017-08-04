@@ -1,0 +1,49 @@
+{% extends "bootstrap/base.html" %}
+{% block head %}
+{{super()}}
+<style>
+	{% include "card/cardStyling.html" %}
+	{% include "partials/holoEffect.html" %}
+</style>
+        {% block styles %}
+                {{super()}}
+                {%include 'main/styling.html'%}
+        {% endblock %}
+{% endblock %}
+{% block content %}
+	<div class='home_header'>
+                <div class='container'>
+                        <a href="{{url_for('profiles.view',name=user.name)}}"><h2>{{user.name}}</h2></a>
+                </div>
+        </div>
+	{% include "partials/singleCardView.html" %}
+	<div class="row">
+		<div class="col-md-1 col-md-offset-4">
+			<a href="{{url_for('card.showCard', id=card.id)}}" class="btn btn-info">Card master</a>
+		</div>
+	</div>
+	<div class='row'>
+	{%for specific in cards %}
+		{%if loop.index0%6 == 0 and loop.index0 != 0%}
+			</div><div class="row">
+		{%endif%}
+		<div class='col-md-2'><a href='{{url_for("profiles.viewUserCard",name = user.name,id=specific.id)}}'><h3>{{specific.date_created}}</h3></a></div>
+	{%endfor%}
+	</div>
+	<div class="modal" id="specificModal" tabindex="-1" role="dialog">
+        	<div class="modal-dialog modal-sm" role="document">
+                	<div class="modal-content">
+                        	<div class="modal-header">
+                                	<button type="button" class="close" data-dismiss="modal"></button>
+                                        <h4 class="modal-title">What do you want to do?</h4>
+                                </div>
+                                <div class="modal-body">
+                                </div>
+                                <div class="modal-footer">
+                                	<button type="button" class="btn btn-primary" onClick="confirmAdd()">Add these</button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                	</div>
+        	</div>
+	</div>
+{% endblock %}

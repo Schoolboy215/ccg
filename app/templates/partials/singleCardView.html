@@ -1,0 +1,17 @@
+<div class="row">
+        <div class = "col-md-4"></div>
+        <div class = "col-md-3" id=cardHolder style="background-color:{{card.backgroundColor}};">
+                <div class="row" style="margin:2%">
+                               <h3 style='border-style:solid; margin-top:0px; margin-bottom:0px;background-color:{{textBackground}}'>{{card.name}}</h3>
+                       </div>
+                <div class="row" style='width:96%; margin-left:2%; margin-right:2%'>
+			<div class="{%if holo %}holographic{%endif%}">
+                        	<img style="width:100%;margin-auto" src='{{url_for('static',filename = 'cardImages/' + card.imageName + '.png')}}'>
+			</div>
+                </div>
+                <div class="row" style="margin:2%">
+                        <p style="margin:0;border-style:solid; background-color:{{textBackground}}">{{card.description}}</p>
+                </div>
+        </div>
+        <div class = "col-md-5"></div>
+</div>
