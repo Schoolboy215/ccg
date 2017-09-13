@@ -102,8 +102,11 @@ def who(id):
 		toReturn = []
 		for i in cards:
 			user = User.query.filter_by(id=i.user_id).first()
+			count = user.cards.filter(UserCards.card_id == card.id).count()
+			r = lambda: random.randint(0,255)
+			color = '#{:02x}{:02x}{:02x}'.format(r(),r(),r())
 			holo = UserCards.query.filter_by(user_id = i.user_id, card_id = i.card_id, holo = True).first()
-			toReturn.append([user.name, (holo != None)])
+			toReturn.append([user.name, (holo != None),count,color])
 		return json.dumps(toReturn)
 	else:
 		return "That id doesn't exist", 400
