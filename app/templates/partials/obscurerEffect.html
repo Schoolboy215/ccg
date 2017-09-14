@@ -11,14 +11,16 @@
 		top: 0;
 		left: 0;
 		right: 0;
-		background: rgba(0,0,0,1);
+		background-image: url("/static/PackCover.png");
+		background-size: cover;
+		opacity: 1;
 	}
 
 	.revealer {
                 position: relative;
         }
         .revealer:after{
-                content: "Click to unwrap";
+                content: " ";
                 z-index: 10;
                 display: block;
                 position: absolute;
@@ -26,11 +28,13 @@
                 top: 0;
                 left: 0;
                 right: 0;
-                background: rgba(0,0,0,1);
-		-webkit-animation:fadeIn 1s;
-		-ms-animation:fadeIn 1s;
-		-o-animation:fadeIn 1s;
-		animation:fadeIn 1s;
+                background-image: url("/static/PackCover.png");
+		background-size: cover;
+		opacity: 1;
+		-webkit-animation:fadeIn 2s;
+		-ms-animation:fadeIn 2s;
+		-o-animation:fadeIn 2s;
+		animation:fadeIn 2s;
 		animation-fill-mode: forwards;
         }
 
