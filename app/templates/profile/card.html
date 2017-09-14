@@ -4,11 +4,14 @@
 <style>
 	{% include "card/cardStyling.html" %}
 	{% include "partials/holoEffect.html" %}
+	{% include "partials/obscurerEffect.html" %}
 </style>
         {% block styles %}
                 {{super()}}
                 {%include 'main/styling.html'%}
         {% endblock %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="/static/js/card/unwrap.js"></script>
 {% endblock %}
 {% block content %}
 	<div class='home_header'>

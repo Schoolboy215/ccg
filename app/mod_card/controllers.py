@@ -91,6 +91,21 @@ def grantCard(id):
 		db.session.commit()
 	else:
 		return "That id doesn't exist", 400
+	origin = {}
+        origin['puller'] = current_user.name
+        origin['date'] = str(user_card.date_created)[0:10]
+
+	return render_template( "profile/card.html",
+                  		user = current_user,
+                                card = card,
+                                cardLookup = user_card,
+                                holo = holo,
+                                ownedCard = True,
+                                cardHistory = {},
+                                origin = origin,
+				justPulled = True,
+                                textBackground = app.config['TEXT_BACKGROUND'],
+                                borderColor = app.config['BORDER_COLOR'])
 	return redirect(url_for('profiles.view',name = current_user.name))
 
 @mod_card.route('/<id>/who', methods=['POST'])

@@ -1,6 +1,6 @@
 <div class="row">
         <div class = "col-md-4"></div>
-        <div class = "col-md-3" id=cardHolder style="background-color:{{card.backgroundColor}};">
+        <div class = "col-md-3{%if justPulled %} obscurer{%endif%}" id=cardHolder style="background-color:{{card.backgroundColor}};">
                 <div class="row" style="margin:2%">
                                <h3 style='border-style:solid; margin-top:0px; margin-bottom:0px;background-color:{{textBackground}}'>{{card.name}}</h3>
                        </div>

@@ -1,0 +1,57 @@
+<style>
+	.obscurer {
+                position: relative;
+        }
+	.obscurer:after{
+		content: " ";
+		z-index: 10;
+		display: block;
+		position: absolute;
+		height: 100%;
+		top: 0;
+		left: 0;
+		right: 0;
+		background: rgba(0,0,0,1);
+	}
+
+	.revealer {
+                position: relative;
+        }
+        .revealer:after{
+                content: "Click to unwrap";
+                z-index: 10;
+                display: block;
+                position: absolute;
+                height: 100%;
+                top: 0;
+                left: 0;
+                right: 0;
+                background: rgba(0,0,0,1);
+		-webkit-animation:fadeIn 1s;
+		-ms-animation:fadeIn 1s;
+		-o-animation:fadeIn 1s;
+		animation:fadeIn 1s;
+		animation-fill-mode: forwards;
+        }
+
+@-webkit-keyframes fadeIn {
+0% {opacity: 1;}
+50% {opacity: 0.5;}
+100% {opacity: 0;}
+}
+@-webkit-keyframes fadeIn {
+0% {opacity: 1;}
+50% {opacity: 0.5;}
+100% {opacity: 0;}
+}
+@-webkit-keyframes fadeIn {
+0% {opacity: 1;}
+50% {opacity: 0.5;}
+100% {opacity: 0;}
+}
+@-webkit-keyframes fadeIn {
+0% {opacity: 1;}
+50% {opacity: 0.5;}
+100% {opacity: 0;}
+}
+</style>

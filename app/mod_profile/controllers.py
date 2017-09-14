@@ -132,6 +132,7 @@ def viewUserCard(name,id):
                                 ownedCard = ownedCard,
 				cardHistory = cardHistory,
 				origin = origin,
+				justPulled = False,
                                 textBackground = app.config['TEXT_BACKGROUND'],
                                 borderColor = app.config['BORDER_COLOR'])
 

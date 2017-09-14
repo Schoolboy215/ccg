@@ -6,7 +6,7 @@ import datetime
 from flask import Blueprint, request, render_template, \
                   flash, g, session, redirect, url_for
 
-from sqlalchemy import desc
+from sqlalchemy import desc, or_
 
 # Import login manager
 from flask.ext.login import LoginManager, UserMixin, login_required, login_user, current_user
@@ -169,7 +169,10 @@ def myUnusedCards(id):
 	usedIds = []
 	for line in trade.lines.all():
 		usedIds.append(line.card_id)
-	print(usedIds)
+	trades = TradeHeader.query.filter(or_(TradeHeader.user1_id == current_user.id, TradeHeader.user2_id == current_user.id),TradeHeader.active == True)
+	for t in trades:
+		for line in t.lines.all():
+			usedIds.append(line.card_id)
 	user = User.query.filter_by(id=current_user.id).first()
 	toReturn = {}
 	for userCard in user.cards.filter(~UserCards.id.in_(usedIds)).group_by(UserCards.card_id, UserCards.holo):
