@@ -20,6 +20,8 @@ from app.mod_auth.models import User
 # Define the blueprint: 'auth', set its url prefix: app.url/auth
 mod_auth = Blueprint('auth', __name__, url_prefix='/auth')
 
+import sys
+
 # Set the route and accepted methods
 @mod_auth.route('/signin/', methods=['GET', 'POST'])
 def signin():
@@ -38,8 +40,7 @@ def signin():
 
             login_user(user)
 
-            flash('Welcome %s' % user.name)
-            return redirect(request.args['next'])
+            return render_template('main/home.html')
 
         flash('Wrong email or password', 'error')
     return render_template("auth/signin.html", form=form)
